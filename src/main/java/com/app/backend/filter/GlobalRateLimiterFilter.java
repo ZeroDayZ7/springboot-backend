@@ -1,31 +1,38 @@
 package com.app.backend.filter;
 
-import io.github.bucket4j.Bucket;
+import com.github.benmanes.caffeine.cache.Caffeine;
+import com.github.benmanes.caffeine.cache.Cache;
 import io.github.bucket4j.Bandwidth;
+import io.github.bucket4j.Bucket;
 import io.github.bucket4j.Refill;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.annotation.Order;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
 import java.time.Duration;
-import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
 
 @Component
+@Order(2)
 public class GlobalRateLimiterFilter extends OncePerRequestFilter {
 
-  @Value("${ratelimiter.requests}")
+  @Value("${ratelimiter.requests:100}")
   private int requests;
 
-  @Value("${ratelimiter.durationMinutes}")
+  @Value("${ratelimiter.durationMinutes:1}")
   private int durationMinutes;
 
-  private final Map<String, Bucket> cache = new ConcurrentHashMap<>();
+  // Cache z Caffeine: max 10k IP i wygasa po 30 min braku aktywności
+  private final Cache<String, Bucket> cache = Caffeine.newBuilder()
+      .expireAfterAccess(Duration.ofMinutes(30))
+      .maximumSize(10_000)
+      .build();
 
   private Bucket createNewBucket() {
     Refill refill = Refill.greedy(requests, Duration.ofMinutes(durationMinutes));
@@ -34,7 +41,7 @@ public class GlobalRateLimiterFilter extends OncePerRequestFilter {
   }
 
   private Bucket resolveBucket(String ip) {
-    return cache.computeIfAbsent(ip, k -> createNewBucket());
+    return cache.get(ip, k -> createNewBucket());
   }
 
   @Override
@@ -48,7 +55,8 @@ public class GlobalRateLimiterFilter extends OncePerRequestFilter {
     if (bucket.tryConsume(1)) {
       filterChain.doFilter(request, response);
     } else {
-      response.setStatus(429);
+      response.setStatus(HttpStatus.TOO_MANY_REQUESTS.value());
+      response.setHeader("Retry-After", String.valueOf(durationMinutes * 60));
       response.getWriter().write("Too many requests");
     }
   }

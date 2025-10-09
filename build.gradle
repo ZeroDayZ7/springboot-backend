@@ -25,9 +25,11 @@ repositories {
 }
 
 dependencies {
+	implementation 'com.github.ben-manes.caffeine:caffeine:3.2.2'
 	implementation 'com.github.vladimir-bukhtoyarov:bucket4j-core:8.0.1'
 	implementation 'org.springframework.boot:spring-boot-starter-web'
 	implementation 'org.springframework.boot:spring-boot-starter-security'
+	compileOnly 'jakarta.servlet:jakarta.servlet-api:6.1.0'
 	compileOnly 'org.projectlombok:lombok'
 	developmentOnly 'org.springframework.boot:spring-boot-devtools'
 	annotationProcessor 'org.projectlombok:lombok'

@@ -1,0 +1,46 @@
+server:
+  port: 8080
+  address: 0.0.0.0
+  forward-headers-strategy: framework
+
+spring:
+  application:
+    name: backend
+
+  devtools:
+    restart:
+      enabled: true
+
+  datasource:
+    url: jdbc:h2:mem:testdb
+    driver-class-name: org.h2.Driver
+    username: sa
+    password:
+
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+
+  security:
+    user:
+      name: admin
+      password: supersecret
+
+cors:
+  allowed-origins:
+    - http://localhost:3000
+    - http://example.com
+
+ratelimiter:
+  requests: 50
+  durationMinutes: 1
+
+logging:
+  level:
+    root: INFO
+    com.app.backend: DEBUG
+  spring:
+    output:
+      ansi:
+        enabled: ALWAYS
