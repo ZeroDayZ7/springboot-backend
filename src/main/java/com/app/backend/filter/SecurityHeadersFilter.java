@@ -9,13 +9,19 @@ import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
-
-
 import java.io.IOException;
 
 @Component
-@Order(3) // Wyższy numer = później w chain, więc logi i rate limiter będą wcześniej
+@Order(2)
 public class SecurityHeadersFilter extends OncePerRequestFilter {
+
+  // Stałe nagłówków bezpieczeństwa
+  private static final String HSTS = "max-age=31536000; includeSubDomains";
+  private static final String X_CONTENT_TYPE_OPTIONS = "nosniff";
+  private static final String X_FRAME_OPTIONS = "SAMEORIGIN";
+  private static final String REFERRER_POLICY = "no-referrer";
+  private static final String PERMISSIONS_POLICY = "geolocation=(), microphone=(), camera=()";
+  private static final String X_POWERED_BY = "Spring Boot";
 
   @Override
   protected void doFilterInternal(
@@ -23,20 +29,23 @@ public class SecurityHeadersFilter extends OncePerRequestFilter {
       @NonNull HttpServletResponse response,
       @NonNull FilterChain filterChain) throws ServletException, IOException {
 
-    // Strict Transport Security (HSTS)
-    response.setHeader("Strict-Transport-Security", "max-age=31536000; includeSubDomains");
+    // HSTS
+    response.setHeader("Strict-Transport-Security", HSTS);
 
-    // Zapobiega MIME type sniffing
-    response.setHeader("X-Content-Type-Options", "nosniff");
+    // MIME type sniffing
+    response.setHeader("X-Content-Type-Options", X_CONTENT_TYPE_OPTIONS);
 
-    // Zapobiega osadzaniu w iframe z innych domen
-    response.setHeader("X-Frame-Options", "SAMEORIGIN");
+    // iframe
+    response.setHeader("X-Frame-Options", X_FRAME_OPTIONS);
 
-    // Polityka referrera
-    response.setHeader("Referrer-Policy", "no-referrer");
+    // Referrer policy
+    response.setHeader("Referrer-Policy", REFERRER_POLICY);
 
-    // Permissions policy (ograniczenie dostępu do niektórych API przeglądarki)
-    response.setHeader("Permissions-Policy", "geolocation=(), microphone=(), camera=()");
+    // Permissions policy
+    response.setHeader("Permissions-Policy", PERMISSIONS_POLICY);
+
+    // Wyłączenie X-Powered-By
+    response.setHeader("X-Powered-By", X_POWERED_BY);
 
     filterChain.doFilter(request, response);
   }

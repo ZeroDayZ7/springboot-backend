@@ -40,7 +40,7 @@ import java.util.stream.IntStream;
  * - Wydajność: Streamy dla kolekcji, cache dla mappera.
  */
 @Component
-@Order(4) // Po logowaniu, rate limiterze i security headers
+@Order(1) // Po logowaniu, rate limiterze i security headers
 public class RequestSanitizationFilter extends OncePerRequestFilter {
 
   private static final Logger log = LoggerFactory.getLogger(RequestSanitizationFilter.class);

@@ -24,7 +24,7 @@ import java.time.Duration;
 import java.util.concurrent.atomic.AtomicInteger;
 
 @Component
-@Order(2)
+@Order(3)
 public class GlobalRateLimiterFilter extends OncePerRequestFilter {
 
   private static final Logger log = LoggerFactory.getLogger(GlobalRateLimiterFilter.class);

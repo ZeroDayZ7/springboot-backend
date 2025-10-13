@@ -15,7 +15,7 @@ import java.io.IOException;
 import java.util.UUID;
 
 @Component
-@Order(1)
+@Order(4)
 public class RequestLoggingFilter extends OncePerRequestFilter {
   private static final Logger logger = LoggerFactory.getLogger(RequestLoggingFilter.class);
   public static final String CORRELATION_ID_HEADER = "X-Correlation-ID";
