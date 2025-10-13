@@ -35,6 +35,7 @@ cors:
 ratelimiter:
   requests: 50
   durationMinutes: 1
+  logFrequency: 10
 
 logging:
   level:

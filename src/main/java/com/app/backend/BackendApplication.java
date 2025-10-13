@@ -19,7 +19,7 @@ public class BackendApplication {
 
     @Bean
     public CommandLineRunner logStartup(ApplicationContext ctx) {
-        return args -> {
+        return _ -> {
             if (ctx instanceof WebServerApplicationContext webCtx) {
                 int port = webCtx.getWebServer().getPort();
                 logger.info("✅ Server started successfully on port {}", port);
