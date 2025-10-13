@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8" ?>
+<?xml version="1.0" encoding="UTF-8"?>
 <configuration>
     <property name="LOG_PATH"
               value="logs" />
@@ -11,14 +11,14 @@
             <maxHistory>30</maxHistory>
         </rollingPolicy>
         <encoder>
-            <pattern>{"timestamp":"%date{ISO8601}","level":"%level","thread":"%thread","logger":"%logger{36}","message":%msg}%n</pattern>
+            <pattern>{"timestamp":"%date{ISO8601}","level":"%level","thread":"%thread","logger":"%logger{36}","correlationId":"%X{correlationId}","message":%msg}%n</pattern>
         </encoder>
     </appender>
     <!-- Konsola -->
     <appender name="CONSOLE"
               class="ch.qos.logback.core.ConsoleAppender">
         <encoder>
-            <pattern>%d{HH:mm:ss.SSS} %-5level %logger{36} - %msg%n</pattern>
+            <pattern>%d{HH:mm:ss.SSS} %-5level %logger{0} - %msg%n</pattern>
         </encoder>
     </appender>
     <!-- Osobny appender dla ErrorLoggingFilter -->
@@ -30,7 +30,7 @@
             <maxHistory>30</maxHistory>
         </rollingPolicy>
         <encoder>
-            <pattern>{"timestamp":"%date{ISO8601}","level":"%level","thread":"%thread","logger":"%logger{36}","message":%msg}%n</pattern>
+            <pattern>{"timestamp":"%date{ISO8601}","level":"%level","thread":"%thread","logger":"%logger{36}","correlationId":"%X{correlationId}","message":%msg}%n</pattern>
         </encoder>
     </appender>
     <!-- Logger dla ErrorLoggingFilter -->

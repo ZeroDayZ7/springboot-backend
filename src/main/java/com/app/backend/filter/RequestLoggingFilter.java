@@ -6,6 +6,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.slf4j.MDC;
 import org.springframework.lang.NonNull;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
@@ -28,8 +29,9 @@ public class RequestLoggingFilter extends OncePerRequestFilter {
 
     String uri = request.getRequestURI();
     if ("/favicon.ico".equals(uri)) {
-      response.setStatus(HttpServletResponse.SC_NO_CONTENT); // 204
-      return; // przerwij filtr, nie logujemy
+      response.setStatus(HttpServletResponse.SC_NO_CONTENT);
+      response.setHeader("Content-Length", "0");
+      return;
     }
 
     long start = System.currentTimeMillis();
@@ -41,21 +43,26 @@ public class RequestLoggingFilter extends OncePerRequestFilter {
     }
     response.setHeader(CORRELATION_ID_HEADER, correlationId);
 
-    String clientIp = extractClientIp(request);
-    String method = request.getMethod();
-    String query = request.getQueryString();
-    if (query != null)
-      uri += "?" + query;
-    String userAgent = request.getHeader("User-Agent");
+    // Ustawienie w MDC
+    MDC.put("correlationId", correlationId);
 
     try {
       filterChain.doFilter(request, response);
     } finally {
       long duration = System.currentTimeMillis() - start;
       int status = response.getStatus();
+      String clientIp = extractClientIp(request);
+      String method = request.getMethod();
+      String query = request.getQueryString();
+      if (query != null) {
+        uri += "?" + query;
+      }
+      String userAgent = request.getHeader("User-Agent");
 
-      logger.info("method={} uri={} ip={} status={} timeMs={} ua=\"{}\" correlationId={}",
-          method, uri, clientIp, status, duration, userAgent, correlationId);
+      logger.info("method={} uri={} ip={} status={} timeMs={} ua=\"{}\"",
+          method, uri, clientIp, status, duration, userAgent);
+
+      MDC.remove("correlationId");
     }
   }
 

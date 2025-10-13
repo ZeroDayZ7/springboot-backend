@@ -22,9 +22,9 @@ public class BackendApplication {
         return _ -> {
             if (ctx instanceof WebServerApplicationContext webCtx) {
                 int port = webCtx.getWebServer().getPort();
-                logger.info("✅ Server started successfully on port {}", port);
+                logger.info(" Server started successfully on port {}", port);
             } else {
-                logger.info("✅ ApplicationContext is not a WebServerApplicationContext (probably running in tests)");
+                logger.info(" ApplicationContext is not a WebServerApplicationContext (probably running in tests)");
             }
         };
     }
