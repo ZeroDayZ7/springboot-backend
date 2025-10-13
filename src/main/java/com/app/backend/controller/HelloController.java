@@ -11,7 +11,7 @@ public class HelloController {
 
     @GetMapping("/hello")
     public String hello() {
-        logger.info("Endpoint /hello został wywołany");
+        logger.info("Endpoint /hello was called");
         return "Hello World!";
     }
 }

@@ -7,6 +7,9 @@ import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.servlet.resource.NoResourceFoundException;
+
+import jakarta.servlet.http.HttpServletRequest;
 
 import java.time.OffsetDateTime;
 import java.util.Map;
@@ -20,6 +23,15 @@ public class GlobalExceptionHandler {
   public ResponseEntity<ProblemDetail> handleNotFound(ResourceNotFoundException ex) {
     ProblemDetail problem = buildProblemDetail(HttpStatus.NOT_FOUND, "Resource Not Found", ex.getMessage());
     return ResponseEntity.status(HttpStatus.NOT_FOUND).body(problem);
+  }
+
+  @ExceptionHandler(NoResourceFoundException.class)
+  public ResponseEntity<Void> handleFavicon(NoResourceFoundException ex, HttpServletRequest request) {
+    if ("/favicon.ico".equals(request.getRequestURI())) {
+      return ResponseEntity.noContent().build(); // 204
+    }
+    // Jeśli inny resource, zwracamy normalny 404
+    return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
   }
 
   // Handler dla ogólnych wyjątków

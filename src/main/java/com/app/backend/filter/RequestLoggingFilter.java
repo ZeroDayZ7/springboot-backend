@@ -26,6 +26,12 @@ public class RequestLoggingFilter extends OncePerRequestFilter {
       @NonNull HttpServletResponse response,
       @NonNull FilterChain filterChain) throws ServletException, IOException {
 
+    String uri = request.getRequestURI();
+    if ("/favicon.ico".equals(uri)) {
+      response.setStatus(HttpServletResponse.SC_NO_CONTENT); // 204
+      return; // przerwij filtr, nie logujemy
+    }
+
     long start = System.currentTimeMillis();
 
     // Pobierz lub wygeneruj correlation ID
@@ -37,7 +43,6 @@ public class RequestLoggingFilter extends OncePerRequestFilter {
 
     String clientIp = extractClientIp(request);
     String method = request.getMethod();
-    String uri = request.getRequestURI();
     String query = request.getQueryString();
     if (query != null)
       uri += "?" + query;
