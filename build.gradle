@@ -25,11 +25,21 @@ repositories {
 }
 
 dependencies {
+	// Spring Data JPA (ORM)
+	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+	// Baza danych – H2 (dev) + MySQL (prod)
+	runtimeOnly 'com.h2database:h2'
+	runtimeOnly 'com.mysql:mysql-connector-j:9.4.0'
+	// Validation (DTO + @Valid)
+	implementation 'org.springframework.boot:spring-boot-starter-validation'
+	// Spring Security (sesje + logowanie)
+	implementation 'org.springframework.boot:spring-boot-starter-security'
+	// Logowanie
+	implementation 'org.springframework.boot:spring-boot-starter-logging'
 	implementation 'org.apache.commons:commons-text:1.14.0'
 	implementation 'com.github.ben-manes.caffeine:caffeine:3.2.2'
 	implementation 'com.github.vladimir-bukhtoyarov:bucket4j-core:8.0.1'
 	implementation 'org.springframework.boot:spring-boot-starter-web'
-	implementation 'org.springframework.boot:spring-boot-starter-security'
 	compileOnly 'jakarta.servlet:jakarta.servlet-api:6.1.0'
 	compileOnly 'org.projectlombok:lombok'
 	developmentOnly 'org.springframework.boot:spring-boot-devtools'
@@ -40,4 +50,8 @@ dependencies {
 
 tasks.named('test') {
 	useJUnitPlatform()
+}
+
+tasks.withType(JavaCompile) {
+    options.encoding = 'UTF-8'
 }

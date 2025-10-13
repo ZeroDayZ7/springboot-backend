@@ -1,3 +1,19 @@
+./gradlew bootRun --args='--spring.profiles.active=dev'
+
+java \
+  -Xms1g -Xmx4g \                     # początkowy 1GB, maksymalny 4GB
+  -XX:+UseG1GC \                      # nowoczesny garbage collector
+  -XX:+HeapDumpOnOutOfMemoryError \   # zrzut pamięci przy OOM
+  -Dspring.profiles.active=prod \     # profil produkcyjny
+  -Dlogging.file.path=/var/log/backend \  # katalog logów
+  -jar springboot-backend-0.0.1-SNAPSHOT.jar
+
+nohup java -Xms1g -Xmx4g -XX:+UseG1GC \
+  -Dspring.profiles.active=prod \
+  -jar springboot-backend-0.0.1-SNAPSHOT.jar \
+  > /var/log/backend/app.log 2>&1 &
+
+
 # 🧰 Gradle – Podstawowe Komendy (Spring Boot / Java)
 
 Zbiór najczęściej używanych komend do pracy z projektem **Spring Boot (Gradle)**.
