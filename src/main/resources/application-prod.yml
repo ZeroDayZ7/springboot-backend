@@ -1,3 +1,4 @@
+spring:
   datasource:
     url: jdbc:mysql://localhost:3306/appdb?useSSL=false&serverTimezone=UTC
     username: root
@@ -6,7 +7,7 @@
 
   jpa:
     hibernate:
-      ddl-auto: validate  # lub none
+      ddl-auto: validate # lub none
     show-sql: false
 
   security:

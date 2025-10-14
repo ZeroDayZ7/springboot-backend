@@ -16,20 +16,24 @@ devtools:
 cors:
   allowed-origins:
     - http://localhost:3000
-    - http://example.com
+    - http://localhost:8080
+    - null
+    - http://127.0.0.1
+    - http://127.0.0.1:8080
 
 ratelimiter:
   requests: 50
   durationMinutes: 1
   logFrequency: 10
   whitelist:
-  - 192.168.0.1
-  - 10.0.0.5
+    - 192.168.0.1
+    - 10.0.0.5
 
 logging:
   level:
     root: INFO
     com.app.backend: DEBUG
+    org.springframework.web.cors: DEBUG
   spring:
     output:
       ansi:
