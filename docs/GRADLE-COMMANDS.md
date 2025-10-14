@@ -1,4 +1,5 @@
 ./gradlew bootRun --args='--spring.profiles.active=dev'
+./gradlew bootRun
 
 java \
   -Xms1g -Xmx4g \                     # początkowy 1GB, maksymalny 4GB

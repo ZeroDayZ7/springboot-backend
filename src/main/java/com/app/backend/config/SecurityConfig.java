@@ -52,6 +52,8 @@ public class SecurityConfig {
                 "Accept",
                 "Origin",
                 "X-Requested-With"));
+        // config.setMaxAge(3600L);
+        config.setMaxAge(0L);
 
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", config);
