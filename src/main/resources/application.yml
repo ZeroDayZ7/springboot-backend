@@ -3,6 +3,9 @@ spring:
     name: backend
   profiles:
     active: dev
+  output:
+    ansi:
+      enabled: ALWAYS
 
 server:
   port: 8080
@@ -34,7 +37,3 @@ logging:
     root: INFO
     com.app.backend: DEBUG
     org.springframework.web.cors: DEBUG
-  spring:
-    output:
-      ansi:
-        enabled: ALWAYS

@@ -35,4 +35,4 @@ out/
 
 ### VS Code ###
 logs/
-db/
+*.mv.db
