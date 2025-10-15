@@ -114,11 +114,11 @@ public class GlobalRateLimiterFilter extends OncePerRequestFilter {
   }
 
   private Bucket resolveBucket(String ip) {
-    return cache.get(ip, _ -> createNewBucket());
+    return cache.get(ip, k -> createNewBucket());
   }
 
   private AtomicInteger resolveCounter(String ip) {
-    return exceedCounters.get(ip, _ -> new AtomicInteger(0));
+    return exceedCounters.get(ip, k -> new AtomicInteger(0));
   }
 
   @Override

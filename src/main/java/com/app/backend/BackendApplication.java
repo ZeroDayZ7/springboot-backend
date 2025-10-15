@@ -22,7 +22,7 @@ public class BackendApplication {
 
     @Bean
     public CommandLineRunner logStartup(ApplicationContext ctx) {
-        return _ -> {
+        return args -> {
             if (ctx instanceof WebServerApplicationContext webCtx) {
                 int port = webCtx.getWebServer().getPort();
                 logger.info("Active profile: {}", Arrays.toString(ctx.getEnvironment().getActiveProfiles()));
